@@ -68,19 +68,29 @@ class LoginViewController: UIViewController, UITextFieldDelegate , LoginDelegate
         }
     }
     
+    private func animateTopConstarint () {
+        UIView.animate(withDuration: 1) {
+            self.stack.rightAnchor.constraint(equalTo: self.stack.superview!.rightAnchor).isActive = true
+            self.stack.leftAnchor.constraint(equalTo: self.stack.superview!.leftAnchor).isActive = true
+            self.stack.bottomAnchor.constraint(equalTo: self.stack.superview!.bottomAnchor).isActive = true
+            self.stack.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 100).isActive = true
+            self.stack.layoutIfNeeded()
+        }
+    }
+    
     private func handleLoginVsRegister () {
         title = mode?.rawValue
 //        mainButtonOutlet.setTitle(mode?.rawValue, for: .normal)
         
-        
+   
         
         
         if mode == .login {
             fullNameLabel.isHidden = true
             nameTextField.isHidden = true
-            stack.spacing = 30
+            stack.spacing = 40
             
-            
+
         }
         if mode == .register {
             passwordTextField.returnKeyType = .next
@@ -133,7 +143,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate , LoginDelegate
              login.userName = textField.text
          }
      }
-    
+
     @IBAction func buttonPressed(_ sender: UIButton) {
         click(sender)
         
