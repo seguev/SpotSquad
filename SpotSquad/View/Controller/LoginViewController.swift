@@ -16,9 +16,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate , LoginDelegate
     
 
     
+    @IBOutlet weak var stack: UIStackView!
     @IBOutlet weak var albumButton: UIButton!
-    
-    @IBOutlet weak var cameraButton: UIButton!
     @IBOutlet weak var fullNameLabel: UILabel!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
@@ -36,15 +35,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate , LoginDelegate
     /**
      the UIImage in pngData.
      */
-    var imageData : Data? {
-        didSet {
-            if picker.sourceType == .camera {
-                cameraButton.tintColor = .blue
-            } else if picker.sourceType == .photoLibrary {
-                albumButton.tintColor = .blue
-            }
-        }
-    }
+    var imageData : Data?
     /**
      Bein set from previous controller
      */
@@ -63,28 +54,33 @@ class LoginViewController: UIViewController, UITextFieldDelegate , LoginDelegate
         pickerSetup()
         handleLoginVsRegister()
         buttonConfig(mainButtonOutlet)
-        testingUserSetup()
+        
+        testingUserSetup() ;#warning("remove")
+
     }
     
     private func pickerSetup () {
         picker.allowsEditing = true
-        picker.sourceType = .camera
-        picker.cameraCaptureMode = .photo
-        picker.showsCameraControls = true
-
+        picker.sourceType = .photoLibrary
+        
         if mode == .login {            
-            cameraButton.isHidden = true
             albumButton.isHidden = true
         }
     }
     
     private func handleLoginVsRegister () {
+        title = mode?.rawValue
+//        mainButtonOutlet.setTitle(mode?.rawValue, for: .normal)
         
-        mainButtonOutlet.setTitle(mode?.rawValue, for: .normal)
+        
+        
         
         if mode == .login {
             fullNameLabel.isHidden = true
             nameTextField.isHidden = true
+            stack.spacing = 30
+            
+            
         }
         if mode == .register {
             passwordTextField.returnKeyType = .next
@@ -158,24 +154,20 @@ class LoginViewController: UIViewController, UITextFieldDelegate , LoginDelegate
         
     }
     
- 
-    @IBAction func cameraButtonPressed(_ sender: UIButton) {
-        picker.sourceType = .camera
-        present(picker, animated: true)
-        
-    }
-    
 
     @IBAction func albumButtonPressed(_ sender: UIButton) {
-        picker.sourceType = .photoLibrary
         present(picker, animated: true)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         guard let editedPhoto = info[.editedImage] as? UIImage else {fatalError("could not create UIIMage from photo")}
-        if let photoData = editedPhoto.pngData() {
+        
+        
+        if let photoData = editedPhoto.jpegData(compressionQuality: 0.7) {
+            
             imageData = photoData
+            albumButton.tintColor = .blue
         }
         picker.dismiss(animated: true)
     }
@@ -197,6 +189,20 @@ func buttonConfig (_ button:UIButton) {
     button.layer.shadowOffset = .init(width: 3, height: 3)
     button.layer.shadowColor = UIColor.darkGray.cgColor
     button.layer.shadowOpacity = 0.8
+    addGradient(to: button, #colorLiteral(red: 0.8941176471, green: 0.7882352941, blue: 0.5333333333, alpha: 1), #colorLiteral(red: 0.8941176471, green: 0.6973415017, blue: 0.5333333333, alpha: 1))
+}
+
+func addGradient (to button:UIButton ,_ first:UIColor,_ second:UIColor) {
+    let gradient = CAGradientLayer()
+    gradient.colors = [first.cgColor,second.cgColor]
+    gradient.frame = button.bounds
+    gradient.masksToBounds = true
+    gradient.shadowColor = UIColor.darkGray.cgColor
+    gradient.shadowOffset = .init(width: 3, height: 3)
+    gradient.shadowRadius = 5
+    gradient.shadowOpacity = 0.7
+    gradient.cornerRadius = 10
+    button.layer.insertSublayer(gradient, at: 0)
 }
 
 func click (_ button:UIButton) {

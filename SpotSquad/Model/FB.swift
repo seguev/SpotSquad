@@ -124,7 +124,6 @@ struct FB {
         let combined = (currentUserEmail+otherUserEmail).sorted()
         var fixed = Array(combined[0...combined.count-1]).map{String($0)}
         fixed.removeAll { $0 == "@" || $0 == "." }
-        print("\(#function) -> \(currentUserEmail) + \(otherUserEmail) = \(fixed.joined())")
         return fixed.joined()
     }
     
@@ -136,9 +135,9 @@ struct FB {
      */
     func fetchUserPhoto (uid:String, complition : @escaping (UIImage) -> Void)  {
         print(#function)
-        let storagePath = storage.child("profileImages/\(uid)/photo.png")
+        let storagePath = storage.child("profileImages/\(uid)/photo.jpeg")
         
-        storagePath.getData(maxSize: 1 * 1024 * 1024) { data, error in
+        storagePath.getData(maxSize: 2 * 1024 * 1024) { data, error in
             if let error {
                 print("Errors while fetching user photo \(error)")
             } else if let data {
@@ -151,6 +150,8 @@ struct FB {
         }
         
     }
+    
+
 
     
     
@@ -217,7 +218,6 @@ struct FB {
                 }
             }
         }
-        
     }
     
     private func printMessageType(_ type:DocumentChangeType) {
@@ -231,7 +231,7 @@ struct FB {
         }
     }
     
-    func changeUserName (to newUserName:String) {
+    func changeUserName (to newUserName:String, complition: @escaping ()->Void) {
         
         let changeRequest = currentUser!.createProfileChangeRequest()
         changeRequest.displayName = newUserName
@@ -241,8 +241,8 @@ struct FB {
                 print("Successfuly changed userName to \(newUserName).")
                 
                 db.collection("users").document(currentUser!.uid).updateData(["username":newUserName])
-                NotificationCenter.default.post(name: updateUINotification, object: nil)
-
+                    
+                complition()
             }
         }
     }

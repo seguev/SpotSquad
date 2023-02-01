@@ -80,7 +80,7 @@ class LoginModel {
     func alertUserIfProfilePhotoIsNil () -> UIAlertController? {
         if delegate?.imageData == nil {
             //explain with an error
-            let alert = UIAlertController(title: "Please select an image from your library or take an image right now.", message: "You cannot procceed without a photo.", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Please select an image from your library.", message: "You cannot procceed without a photo.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .cancel))
             return alert
         } else {
@@ -121,7 +121,6 @@ class LoginModel {
                     guard delegate.imageData != nil else {fatalError("No image!")}
                     self.savePhoto(delegate.imageData!, uid: authResult.user.uid)
                                                             
-                    delegate.performSegue(withIdentifier: "toMain", sender: self)
                 }
             }
         }
@@ -135,8 +134,8 @@ class LoginModel {
      private func savePhoto (_ photoData:Data, uid:String) {
          print(#function)
          
-         let storagePath = storage.child("profileImages/\(uid)/photo.png")
-
+         let storagePath = storage.child("profileImages/\(uid)/photo.jpeg")
+         
         storagePath.putData(photoData) {[weak self] metaData, error in
             guard let self = self else {return}
             if let error {
@@ -147,8 +146,6 @@ class LoginModel {
                     if let url, error == nil {
                         
                         self.updateUserInfo(to: self.userName!, user: FB.shared.currentUser!, photoUrl: url)
-                        ;#warning("doesnt work if internet is trash, add update image functionality")
-
                     }
                 }
             } else {
@@ -202,13 +199,11 @@ class LoginModel {
                 if let document = document, document.exists {
                     
                     currentUserDocument.updateData(["email":email,"username":userName])
-                    print("updating user info") ;#warning("print")
                     
                     dispatchGroup.leave()
                 } else {
 
                     currentUserDocument.setData(["email":email,"username":userName])
-                    print("New user: \(user.uid) has been registered!.") ;#warning("print")
 
                     dispatchGroup.leave()
                 }
@@ -219,7 +214,7 @@ class LoginModel {
         
         dispatchGroup.notify(queue: .main) {
             
-            NotificationCenter.default.post(name: updateUINotification, object: nil)
+            self.delegate?.performSegue(withIdentifier: "toMain", sender: self)
         }
     }
     

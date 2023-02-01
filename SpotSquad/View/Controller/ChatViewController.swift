@@ -10,7 +10,7 @@ import FirebaseCore
 import FirebaseFirestore
 import FirebaseAuth
 import NaturalLanguage
-
+import AVFoundation
 
 class ChatViewController: UIViewController {
     
@@ -18,6 +18,8 @@ class ChatViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var messageTextField: UITextField!
     
+    
+    var player : AVAudioPlayer!
     /**
      MessageData = ["text":text, "time": Date(), "sender": email, "receiver" : otherEmail]
      */
@@ -49,7 +51,8 @@ class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
+        
+        view.backgroundColor = .white
 //        tableView.register(UINib(nibName: "ChatTableViewCell", bundle: nil), forCellReuseIdentifier: "chatCell")
         tableView.register(ChatTableViewCell.self, forCellReuseIdentifier: "ChatTableViewCell")
         tableView.delegate = self
@@ -84,6 +87,8 @@ class ChatViewController: UIViewController {
             messageTextField.text = ""
             
             hideSendButton()
+            
+            playSendSound()
         }
     }
     
@@ -168,7 +173,6 @@ extension ChatViewController : UITableViewDelegate , UITableViewDataSource {
             cell.mainText = messageText
         }
         
-        
         return cell
     }
     
@@ -237,6 +241,7 @@ extension ChatViewController : UITextFieldDelegate {
         
     }
     
+    // MARK: - Message handling
     
     @objc func gotNewMessage (_ notification:Notification) {
         
@@ -253,16 +258,30 @@ extension ChatViewController : UITextFieldDelegate {
         }
     }
     
+    private func playSendSound () {
+        
+        guard let url = Bundle.main.url(forResource: "sendSound", withExtension: "wav") else {fatalError()}
+        do {
+            player = try AVAudioPlayer(contentsOf: url)
+            player.volume = 0.02
+            player.play()
+        } catch {
+            print(error.localizedDescription)
+        }
+
+    }
+    
+    
     
 }
 
 
 extension String {
     var isRightToLeft: Bool {
+        
         guard let language = NLLanguageRecognizer.dominantLanguage(for: self) else {
             return false
         }
-
         switch language {
         case .arabic, .hebrew, .persian, .urdu:
             return true

@@ -17,19 +17,6 @@ struct StorageManager {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    func printAllSavesSpots () {
-        let request : NSFetchRequest<Spot> = .init(entityName: "Spot")
-        do {
-            let spots = try context.fetch(request)
-            print("* Saved spots so far :")
-            for spot in spots {
-                print("\(spot.name!) : \(spot.visits)")
-            }
-            print("______________")
-        } catch {
-            print(error)
-        }
-    }
     
     private func fechAllSpots () -> [Spot] {
         let request : NSFetchRequest<Spot> = .init(entityName: "Spot")
@@ -40,6 +27,17 @@ struct StorageManager {
             return []
         }
     }
+    
+    func printAllSavesSpots () {
+        let spots = fechAllSpots()
+        print("* Saved spots so far")
+        for spot in spots {
+            print("\(spot.name!) : \(spot.visits)")
+        }
+        print("______________")
+    }
+    
+
 
     /**
      Create NSFetchRequests with name predicate.
@@ -60,116 +58,66 @@ struct StorageManager {
             matchingSpots = try context.fetch(request)
         } catch {print(error)}
         
-        let exists  = matchingSpots.count > 0
+        let exists  = !matchingSpots.isEmpty
         
         if exists {
             updateExistingSpot(matchingSpots[0])
         } else if !exists {
             saveNewSpot(item)
         }
-        
     }
     
     
     private func saveNewSpot (_ item:MKMapItem) {
-        
-        do {
+
             let newSpot = Spot(context: context)
             newSpot.name = item.placemark.name
             newSpot.address = item.placemark.thoroughfare
-            newSpot.visits = 0
-            try context.save()
+            newSpot.visits = 1
+            try! context.save()
             NotificationManager.shared.coreDataUpdate("New spot! \(newSpot.name!)")
-        } catch {
-            print(#function)
-            print(error)
-        }
+        print("New spot! \(newSpot.name!)")
     }
     
     private func updateExistingSpot (_ existingSpot:Spot) {
      
-        do {
             existingSpot.visits += 1
-            try context.save()
+            try! context.save()
             NotificationManager.shared.coreDataUpdate("Its your #\(existingSpot.visits) visit at \(existingSpot.name!)")
-        } catch {
-            print(error)
-        }
-        
     }
 
     /**
      - Fech all saved spots from core data
-     - Filter top 3 (if exists)
      - Updates delegate?.spotsArray
      - Call updateUI notification
      */
-     func loadMostVisitedSpots () -> [String] {
+     func loadSortedSpotsStrings () -> [String] {
          let allSpots = fechAllSpots()
         
          let sortedSpotArray = allSpots.sorted { $0.visits > $1.visits }
          
-         if sortedSpotArray.count > 2 {
-             let topThree = Array(sortedSpotArray[0...2])
-             
-             let topThreeStringed = topThree.map {$0.name!}
-             
-             return topThreeStringed
-             
-         } else {
-             let stringedArray = sortedSpotArray.map{$0.name!}
-             
-             return stringedArray
-         }
+         let stringedArray = sortedSpotArray.map { $0.name! }
+         
+         return stringedArray
+         
+
+     }
+    
+    /**
+     Creates 10 fake visits from random Cafe coordinates and saves it in core data as spots.
+     */
+    func saveTenFakeVisits () async {
+        let visits = makeDebugFakeVisitsArray(10) as [CLVisit]
+        for visit in visits {
+            let coordinate = visit.coordinate
+            let request = MKLocalPointsOfInterestRequest(center: coordinate, radius: 100)
+            let search = MKLocalSearch(request: request)
+            let result = try? await search.start()
+             let item = result?.mapItems[0]
+            checkIfExistsAndProceed(item)
+        }
     }
     
-    
-    
-    /*
-     func updateSpotVisits(coordinate: CLLocationCoordinate2D, managedObjectContext: NSManagedObjectContext) {
-         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Spot")
-         let predicate = NSPredicate(format: "latitude == %lf AND longitude == %lf", coordinate.latitude, coordinate.longitude)
-         fetchRequest.predicate = predicate
-         do {
-             let spots = try managedObjectContext.fetch(fetchRequest) as! [Spot]
-             if spots.count > 0 {
-                 // spot exists, update visits
-                 let spot = spots[0]
-                 spot.visits += 1
-             } else {
-                 // spot does not exist, create new spot and set visits
-                 let spot = NSEntityDescription.insertNewObject(forEntityName: "Spot", into: managedObjectContext) as! Spot
-                 spot.latitude = coordinate.latitude
-                 spot.longitude = coordinate.longitude
-                 spot.visits = 1
-             }
-             try managedObjectContext.save()
-         } catch {
-             print("Error fetching or saving data: \(error)")
-         }
-     }
-
-     
-     */
-    
-    
-    
-    
-    
-    
-//    func loadVisits () -> [Visit] {
-//
-//        let request = NSFetchRequest<Visit>(entityName: "Visit")
-//
-//        do {
-//            return try context.fetch(request)
-//        } catch {
-//            print(#function)
-//            print(error)
-//
-//        }
-//        return []
-//    }
     
 //    func deleteAllVisits () {
 //        do {

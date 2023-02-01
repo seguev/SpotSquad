@@ -22,7 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         locationManager.delegate = self
-        
+        locationManager.startMonitoringVisits()
+        locationManager.allowsBackgroundLocationUpdates = true
         NotificationManager.shared.notificationCenter.requestAuthorization(options: [.alert,.badge,.sound]) { _, _ in}
         return true
     }
@@ -39,15 +40,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     /**
      Checks if use location CLAuthorizationStatus and call delegate.gotLocationAndCanProceed if so.
      */
-    private func handleUserLocation (status: CLAuthorizationStatus) {
-            
+    private func handleUserLocation (status: CLAuthorizationStatus) {        
         switch status {
         case .notDetermined:
             locationManager.requestAlwaysAuthorization()
         case .authorizedWhenInUse, .authorizedAlways:
-            locationManager.allowsBackgroundLocationUpdates = true
             locationManager.startMonitoringVisits()
         default:
+            locationManager.requestAlwaysAuthorization()
             redirectToSettings()
         }
     }
@@ -61,21 +61,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     - calls request on each visit and if its a new cafe, save it.
      - when login, Do Not launch a new request for every visits saved, just uplaod from core data!
      */
-    func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {        
-        Task {
-             let newSpot = await checkIfVisitedCafe(visit.coordinate)
+    func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
+        
+//        if NotificationManager.shared.isWeirdVisit(visit) { return } else {
+            Task {
+                let newSpot = await checkIfVisitedCafe(visit.coordinate)
                 
                 NotificationManager.shared.sendSpecificNotification(newSpot, visit: visit)
                 
                 StorageManager.shared.checkIfExistsAndProceed(newSpot)
-        }
+            }
+//        }
     }
     
     /**
      Being called from the background
      */
     private func checkIfVisitedCafe (_ coorditanes:CLLocationCoordinate2D) async -> MKMapItem?  {
-        print("making a request!")
+        
         let request = MKLocalPointsOfInterestRequest(center: coorditanes, radius: 100)
         
         request.pointOfInterestFilter = .init(including: [.cafe])

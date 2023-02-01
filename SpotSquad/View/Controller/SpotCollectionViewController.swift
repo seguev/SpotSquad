@@ -33,23 +33,31 @@ class SpotCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
         print(#function)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(updateUI(_:)), name: updateUINotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(updateUI(_:)), name: updateUINotification, object: nil)
                 
+//        Task { await StorageManager.shared.saveTenFakeVisits() }
+        
         initialConfig()
         
-        spotsArray = StorageManager.shared.loadMostVisitedSpots()
+        spotsArray = StorageManager.shared.loadSortedSpotsStrings()
         
-        FB.shared.addCafeToFBCollection(from: spotsArray)
+        FB.shared.addCafeToFBCollection(from: spotsArray) ;#warning("check")
+
+//        NotificationCenter.default.post(name: updateUINotification, object: nil)
         
-        NotificationCenter.default.post(name: updateUINotification, object: nil)
         
-        titleButton.setTitle(FB.shared.currentUser!.displayName!, for: .normal)
+//        titleButton.setTitle(FB.shared.currentUser!.displayName!, for: .normal)
+        
+        
+        
+        updateUI()
+        
+        StorageManager.shared.printAllSavesSpots()
         
         if spotsArray.isEmpty {showNoSpotsPopUp()}
     }
 
     private func showNoSpotsPopUp () {
-        StorageManager.shared.printAllSavesSpots()
         popUp.alpha = 0
         popUpLabel.alpha = 0
         UIView.animate(withDuration: 0.5, delay: 0.5) {
@@ -108,7 +116,8 @@ class SpotCollectionViewController: UICollectionViewController {
         alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
             if let text = textField.text, text.contains(where: { $0 != " " }){
                 
-                FB.shared.changeUserName(to: text)
+                FB.shared.changeUserName(to: text, complition: self.updateUI)
+                
             }
         }))
         present(alert, animated: true)
@@ -121,7 +130,6 @@ class SpotCollectionViewController: UICollectionViewController {
         layout.itemSize = .init(width: 150, height: 150)
         layout.scrollDirection = .vertical
         collectionView.collectionViewLayout = layout
-        collectionView.backgroundColor = .white
 
     }
     
@@ -129,7 +137,7 @@ class SpotCollectionViewController: UICollectionViewController {
      Being called from LoginModel if registering.
      - does NOT being called from signIn()
      */
-    @objc func updateUI(_ notification:Notification) {
+    private func updateUI() {
         print(#function)
         
         if let userName = FB.shared.currentUser?.displayName {
@@ -191,6 +199,7 @@ extension SpotCollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! SpotCollectionViewCell
 //        cell.layer.cornerRadius = cell.bounds.height/2
 //         cell.clipsToBounds = true

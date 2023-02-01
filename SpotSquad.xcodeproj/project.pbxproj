@@ -13,6 +13,7 @@
 		604296482977E0D10075C69B /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604296472977E0D10075C69B /* LoginModel.swift */; };
 		6042966F297DCB1D0075C69B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 6042966E297DCB1D0075C69B /* FirebaseStorage */; };
 		60429671297DCB1D0075C69B /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 60429670297DCB1D0075C69B /* FirebaseStorageCombine-Community */; };
+		604CAD0229897B280093CA7F /* sendSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 604CAD0129897B280093CA7F /* sendSound.wav */; };
 		60672D9E29680F480073BD7A /* SpotSquad.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 60672D9C29680F480073BD7A /* SpotSquad.xcdatamodeld */; };
 		60672DA029680FDA0073BD7A /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60672D9F29680FDA0073BD7A /* StorageManager.swift */; };
 		60672DA229681A480073BD7A /* SpotCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60672DA129681A480073BD7A /* SpotCollectionViewController.swift */; };
@@ -42,6 +43,7 @@
 		604296412976C4DD0075C69B /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		604296432976C8400075C69B /* UserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCollectionViewCell.swift; sourceTree = "<group>"; };
 		604296472977E0D10075C69B /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
+		604CAD0129897B280093CA7F /* sendSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sendSound.wav; sourceTree = "<group>"; };
 		60672D9D29680F480073BD7A /* CoffeeFetch.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoffeeFetch.xcdatamodel; sourceTree = "<group>"; };
 		60672D9F29680FDA0073BD7A /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		60672DA129681A480073BD7A /* SpotCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCollectionViewController.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				60398F162966F8F600C0BD0B /* Model */,
 				60398F172966F90300C0BD0B /* View */,
 				60FF5DD72966BF400031B40E /* Assets.xcassets */,
+				604CAD0129897B280093CA7F /* sendSound.wav */,
 				60FF5DDC2966BF400031B40E /* Info.plist */,
 				60672DBF296EFFB80073BD7A /* GoogleService-Info.plist */,
 			);
@@ -228,6 +231,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60FF5DDB2966BF400031B40E /* LaunchScreen.storyboard in Resources */,
+				604CAD0229897B280093CA7F /* sendSound.wav in Resources */,
 				60672DC0296EFFB80073BD7A /* GoogleService-Info.plist in Resources */,
 				60FF5DD82966BF400031B40E /* Assets.xcassets in Resources */,
 				60FF5DD62966BF3E0031B40E /* Main.storyboard in Resources */,
