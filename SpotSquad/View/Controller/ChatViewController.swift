@@ -52,7 +52,7 @@ class ChatViewController: UIViewController {
         super.viewDidLoad()
         
         
-        view.backgroundColor = .white
+        
 //        tableView.register(UINib(nibName: "ChatTableViewCell", bundle: nil), forCellReuseIdentifier: "chatCell")
         tableView.register(ChatTableViewCell.self, forCellReuseIdentifier: "ChatTableViewCell")
         tableView.delegate = self
