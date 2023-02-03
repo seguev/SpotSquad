@@ -52,12 +52,12 @@ class ChatTableViewCell: UITableViewCell {
 
         
         if sender == .currentUser {
-            background.backgroundInsets = .init(top: 10, leading: 25, bottom: 10, trailing: 80)
-            content.directionalLayoutMargins = .init(top: 15, leading: 35, bottom: 15, trailing: 90)
+            background.backgroundInsets = .init(top: 10, leading: 25, bottom: 10, trailing: 100)
+            content.directionalLayoutMargins = .init(top: 15, leading: 35, bottom: 15, trailing: 110)
             background.backgroundColor = .systemBlue
         } else if sender == .otherUser {
-            background.backgroundInsets = .init(top: 10, leading: 80, bottom: 10, trailing: 25)
-            content.directionalLayoutMargins = .init(top: 15, leading: 90, bottom: 15, trailing: 35)
+            background.backgroundInsets = .init(top: 10, leading: 100, bottom: 10, trailing: 25)
+            content.directionalLayoutMargins = .init(top: 15, leading: 110, bottom: 15, trailing: 35)
             background.backgroundColor = .blue
         }
         

@@ -55,7 +55,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     private func redirectToSettings () {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
     }
- 
     
     /**
     - calls request on each visit and if its a new cafe, save it.
@@ -63,15 +62,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
      */
     func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
         
-//        if NotificationManager.shared.isWeirdVisit(visit) { return } else {
-            Task {
-                let newSpot = await checkIfVisitedCafe(visit.coordinate)
-                
-                NotificationManager.shared.sendSpecificNotification(newSpot, visit: visit)
-                
-                StorageManager.shared.checkIfExistsAndProceed(newSpot)
-            }
-//        }
+        let visitInterval = visit.departureDate.timeIntervalSince(visit.arrivalDate)
+        let isMoreThanFiveHours = visitInterval > (60*60*5)
+        let isLessThanTwentyMin = visitInterval < (60*20)
+        let isDistantFuture = visit.departureDate == Date.distantFuture
+        
+        guard !isMoreThanFiveHours, !isLessThanTwentyMin, !isDistantFuture else {return}
+        
+        Task {
+            let newSpot = await checkIfVisitedCafe(visit.coordinate)
+            
+            NotificationManager.shared.sendSpecificNotification(newSpot, visit: visit)
+            
+            StorageManager.shared.checkIfExistsAndProceed(newSpot)
+        }
+        
     }
     
     /**
