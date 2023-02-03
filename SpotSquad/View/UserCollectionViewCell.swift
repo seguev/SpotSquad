@@ -27,9 +27,11 @@ class UserCollectionViewCell: UICollectionViewCell {
             self.cellImage.frame = .init(x: 0, y: 0, width: imageHeight, height: imageHeight)
             self.cellImage.layer.cornerRadius = self.cellImage.frame.height / 2
             
-            self.cellImage.layer.shadowColor = UIColor.darkGray.cgColor
-            self.cellImage.layer.shadowRadius = 5
-            
+            self.layer.shadowColor = UIColor.darkGray.cgColor
+            self.layer.shadowRadius = 5
+            self.layer.shadowOpacity = 0.6
+            self.layer.shadowOffset = .init(width: 3, height: 3)
+            self.clipsToBounds = false
         }
     }
     

@@ -47,40 +47,7 @@ struct NotificationManager {
         
         notificationCenter.add(request)
     }
-    
-    
-    
-//    func isWeirdVisit (_ visit:CLVisit) -> Bool {
-//
-//        let visitInterval = visit.departureDate.timeIntervalSince(visit.arrivalDate)
-//        let isMoreThanFiveHours = visitInterval > (60*60*5)
-//        let isLessThanTwentyMin = visitInterval < (60*20)
-//
-//        if isMoreThanFiveHours || isLessThanTwentyMin {
-//
-//            let timeSpent = turnTimeIntervalToString(visitInterval)
-//
-//            let df = DateFormatter()
-//            df.dateFormat = "YYYY, HH:mm a"
-//            let arrival = df.string(from: visit.arrivalDate)
-//            let departure : String = visit.departureDate == Date.distantFuture ? "NoDipartureTime" : df.string(from: visit.departureDate)
-//            let content = UNMutableNotificationContent()
-//            content.sound = .default
-//
-//            content.title = "A weird visit has beed recognized!"
-//            content.body = "Arrival: \(arrival), departure: \(departure). total of \(timeSpent)"
-//
-//            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(60), repeats: false)
-//            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-//
-//            notificationCenter.add(request)
-//            return true
-//        } else {
-//            //normal visit
-//            return false
-//        }
-//    }
-    
+                
     private func turnTimeIntervalToString (_ timeInterval:TimeInterval) -> String {
         if timeInterval > 3600 {
             return "\(timeInterval/120)h"
@@ -101,8 +68,6 @@ struct NotificationManager {
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         
         notificationCenter.add(request)
-        
-        
     }
     
     

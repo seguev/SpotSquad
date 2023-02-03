@@ -18,9 +18,16 @@ class SpotCollectionViewCell: UICollectionViewCell {
         setSpotSystemImage(i: index+1)
     }
     private func setSpotSystemImage(i : Int) {
-//        setGradientColor(i, to: spotImageView)
-        spotImageView.image = UIImage(systemName: "\(i).circle")
-        spotImageView.tintColor = #colorLiteral(red: 0.5176470588, green: 0.8235294118, blue: 0.7725490196, alpha: 1)
+
+        spotImageView.image = UIImage(systemName: "\(i).circle")?.withConfiguration(UIImage.SymbolConfiguration(weight: .thin))
+        
+//        image?.withConfiguration(<#T##configuration: UIImage.Configuration##UIImage.Configuration#>)
+//        UIImage.Configuration = .
+//        spotImageView.image = image
+        
+        
+//        spotImageView.tintColor = #colorLiteral(red: 0.5176470588, green: 0.8235294118, blue: 0.7725490196, alpha: 1)
+        spotImageView.tintColor = .black
         self.clipsToBounds = false
 
         let gradient = CAGradientLayer()
@@ -28,48 +35,13 @@ class SpotCollectionViewCell: UICollectionViewCell {
         gradient.masksToBounds = true
         gradient.frame = spotImageView.frame
         spotImageView.frame = spotImageView.bounds
-        
+                
         let x = spotImageView.bounds.height * 0.84
         gradient.bounds = .init(x: 0, y: 0, width: x, height: x)
         gradient.cornerRadius = gradient.bounds.height / 2
         
         self.layer.insertSublayer(gradient, at: 0)
     }
-    
-    /*private func setGradientColor (_ i:Int, to view:UIView) {
-        switch i {
-        case 1:
-            
-            let colors : [CGColor] = [UIColor.purple.cgColor,UIColor.systemPurple.cgColor]
-            let gradient = CAGradientLayer()
-            gradient.colors = colors
-            gradient.frame = view.bounds
-            gradient.masksToBounds = true
-            gradient.cornerRadius = (view.frame.width+view.frame.height)/2
-            gradient.shadowOpacity = 0.5
-            gradient.
-            view.layer.insertSublayer(gradient, at: 0)
-            
-        case 2:
-            let colors : [CGColor] = [UIColor.blue.cgColor,UIColor.systemBlue.cgColor]
-            let gradient = CAGradientLayer()
-            gradient.colors = colors
-            gradient.frame = layer.frame
-            ;#warning("continue from here")
-
-//            image.tintColor = .blue
-        case 3:
-            let colors : [CGColor] = [UIColor.brown.cgColor,UIColor.systemBrown.cgColor]
-            let gradient = CAGradientLayer()
-            gradient.colors = colors
-            gradient.frame = layer.frame
-            ;#warning("continue from here")
-
-//            image.tintColor = .brown
-        default:
-            break
-        }
-    }*/
     
     private func setShadow (_ image:UIImageView) {
         image.layer.shadowOffset = .init(width: 3, height: 3)
@@ -78,13 +50,12 @@ class SpotCollectionViewCell: UICollectionViewCell {
         image.layer.shadowOpacity = 0.8
     }
     
-   
+ 
     
     func click () {
         let tap = UIImpactFeedbackGenerator(style: .rigid)
         tap.prepare()
         tap.impactOccurred()
-        
         
     }
 }

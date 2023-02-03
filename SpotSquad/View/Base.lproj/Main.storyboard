@@ -223,10 +223,11 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="1Ff-5g-B3u">
                                             <rect key="frame" x="0.0" y="0.0" width="154" height="151"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Gyi-n6-hXM">
-                                                    <rect key="frame" x="0.0" y="1" width="154" height="124.33333333333334"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Gyi-n6-hXM">
+                                                    <rect key="frame" x="0.0" y="2.3333333333333286" width="154" height="121"/>
+                                                    <imageReference key="image" image="circle.fill" catalog="system" symbolScale="small"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l3O-AU-Tsw">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="l3O-AU-Tsw">
                                                     <rect key="frame" x="0.0" y="130.66666666666666" width="154" height="20.333333333333343"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20.333333333333329" id="4w0-q3-P2m"/>

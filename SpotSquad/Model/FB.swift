@@ -64,9 +64,7 @@ struct FB {
             
             
         }
-    }
-    
-    
+    }    
     
     /**
      Fetch all spot's UIDs of a spot and call getUserNamesFromUIDs() for each.
@@ -151,9 +149,6 @@ struct FB {
         
     }
     
-
-
-    
     
     // MARK: - Chat
     /**
@@ -168,7 +163,6 @@ struct FB {
             let hash = createHash(currentUserEmail: email, otherUserEmail: otherEmail)
             
             db.collection("messages").document(spot).collection(hash).addDocument(data: ["text":text, "time": Date(), "sender": email, "receiver" : otherEmail])
-            
             
         }
     }

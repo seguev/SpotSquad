@@ -138,18 +138,20 @@ class LoginModel {
          
         storagePath.putData(photoData) {[weak self] metaData, error in
             guard let self = self else {return}
-            if let error {
+            if let error , metaData != nil {
                 print("Error while saving photo! : \(error)")
-            } else if metaData != nil {
-                
+                Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { timer in
+                    if let compressedData =  UIImage(data: photoData)?.jpegData(compressionQuality: 0.6) {
+                        self.savePhoto(compressedData, uid: uid)
+                    }
+                }
+            } else {
                 storagePath.downloadURL { url, error in
                     if let url, error == nil {
                         
                         self.updateUserInfo(to: self.userName!, user: FB.shared.currentUser!, photoUrl: url)
                     }
                 }
-            } else {
-                print("Error while saving photo!")
             }
         }
     }
