@@ -55,7 +55,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate , LoginDelegate
         handleLoginVsRegister()
         buttonConfig(mainButtonOutlet)
         
-        testingUserSetup() ;#warning("remove")
 
     }
     
@@ -97,13 +96,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate , LoginDelegate
         }
     }
     
-    #warning("delete this after debug")
-    private func testingUserSetup () {
-        emailTextField.text = "test@gmail.com"
-        passwordTextField.text = "123456"
-        login.email = "test@gmail.com"
-        login.password = "123456"
-    }
+
     
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
