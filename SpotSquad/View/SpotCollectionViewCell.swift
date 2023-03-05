@@ -27,7 +27,7 @@ class SpotCollectionViewCell: UICollectionViewCell {
         
         
 //        spotImageView.tintColor = #colorLiteral(red: 0.5176470588, green: 0.8235294118, blue: 0.7725490196, alpha: 1)
-        spotImageView.tintColor = .black
+        spotImageView.tintColor = #colorLiteral(red: 0.6620000005, green: 0.824000001, blue: 0.8539999723, alpha: 1)
         self.clipsToBounds = false
 
         let gradient = CAGradientLayer()
